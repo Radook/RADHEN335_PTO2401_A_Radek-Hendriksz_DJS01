@@ -6,29 +6,26 @@
  */
 
 // Given Parameters
-const vel = 10000; // velocity (km/h)
-const acc = 3; // acceleration (m/s^2)
-const time = 3600; // seconds (1 hour)
-const d = 0; // distance (km)
-const fuel = 5000; // remaining fuel (kg)
-const fbr = 0.5; // fuel burn rate (kg/s)
+const velocity = 10000; // velocity (km/h)
+const acceleration = 3; // acceleration (m/s^2)
+const timeInSeconds = 3600; // seconds (1 hour)
+const initialDistance = 0; // distance (km)
+const remainingFuel = 5000; // remaining fuel (kg)
+const fuelBurnRate = 0.5; // fuel burn rate (kg/s)
 
-
-const d2 = d + (vel*time) //calcultes new distance
-const rf = fbr*time //calculates remaining fuel
-const vel2 = calcNewVel(acc, vel, time) //calculates new velocity based on acceleration
-
-// Pick up an error with how the function below is called and make it robust to such errors
-calcNewVel = (vel, acc, time) => { 
-  return vel + (acc*time)
+// Function to calculate new velocity with error handling
+const calcNewVelocity = (velocity, acceleration, time) => {
+    if (typeof velocity !== 'number' || typeof acceleration !== 'number' || typeof time !== 'number') {
+        throw new Error('Invalid input: velocity, acceleration, and time must be numbers.');
+    }
+    return velocity + (acceleration * time);
 }
 
-console.log(`Corrected New Velocity: ${vel2} km/h`);
-console.log(`Corrected New Distance: ${d2} km`);
-console.log(`Corrected Remaining Fuel: ${rf} kg`);
+// Calculations
+const newDistance = Math.round(initialDistance + (velocity * timeInSeconds / 3600)); // calculates new distance in km and rounds to nearest whole number
+const remainingFuelAfterBurn = Math.round(remainingFuel - (fuelBurnRate * timeInSeconds)); // calculates remaining fuel and rounds to nearest whole number
+const newVelocity = Math.round(calcNewVelocity(velocity * 1000 / 3600, acceleration, timeInSeconds) * 3600 / 1000); // converts velocity to m/s for calculation and back to km/h, then rounds
 
-
-
-
-
-
+console.log(`Corrected New Velocity: ${newVelocity} km/h`);
+console.log(`Corrected New Distance: ${newDistance} km`);
+console.log(`Corrected Remaining Fuel: ${remainingFuelAfterBurn} kg`);
